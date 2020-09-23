@@ -2,8 +2,7 @@ const CustomError = require("../extensions/custom-error");
 
 module.exports = function getSeason(date) {
   if (!date) { return 'Unable to determine the time of year!' };
-
-  try {
+  if (Object.prototype.toString.call(date) === '[object Date]') {
     const month = date.getMonth();
     if (month === 0 || month === 1 || month === 11) {
       return 'winter';
@@ -13,10 +12,8 @@ module.exports = function getSeason(date) {
       return 'summer';
     } else if (month) {
       return 'autumn';
-    } else if (!date.getMonth()) { // начиная с этого места не работает как надож
-      throw new Error('THROWN');
     }
-  } catch (e) {
-    console.log("Date Error: " + e.message);
-  }
+  } else {
+      throw new Error();
+    }
 };
