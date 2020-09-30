@@ -1,34 +1,32 @@
 const CustomError = require("../extensions/custom-error");
 
 module.exports = function transform(arr) {
-  if (!Array.isArray(arr)) {
-    throw new Error();
-  }
-
-  if (arr.length === 0) {
-    return arr;
-  }
+  if (!Array.isArray(arr)) { throw new Error(); }
+  if (arr.length === 0) { return arr; }
 
   let resArr = [];
-  let arrCopy = arr.slice();
 
-  arrCopy.forEach((item, index) => {
-    //console.log(index, item === "--discard-next", index !== arr.length, typeof arr[index + 1] !== "string");
-    if (typeof(item) === "number") {
-      resArr.push(item);
-    } else if (item === "--discard-next" && index !== arrCopy.length && typeof(arrCopy[index + 1]) !== "string") {
-      arrCopy.splice(index + 1, 1);
-      //console.log(arrCopy[index + 1]);
-    } else if (item === "--discard-prev" && index !== 0 && typeof(arrCopy[index - 1]) !== "string") {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === "--discard-prev") {
       resArr.pop();
-    } else if (
-      item === "--double-next" && index !== arrCopy.length && typeof(arrCopy[index + 1]) !== "string") {
-      resArr.push(arrCopy[index + 1]);
-    } else if (
-      item === "--double-prev" &&  index !== 0 && typeof(arrCopy[index - 1]) !== "string" ) {
-      resArr.push(arrCopy[index - 1]);
+
+    } else if (arr[i] === "--double-next") {
+        if (arr[i + 1] !== undefined)
+          { resArr.push(arr[i + 1]); }
+
+    } else if (arr[i] === "--double-prev") {
+        if (arr[i - 1] !== undefined)
+          { resArr.push(arr[i - 1]); }
+
+    } else if (arr[i] === "--discard-next") {
+        if (arr[i + 2] && arr[i + 2].toString().includes('-prev'))
+          { i += 2; }
+        else
+          { i += 1; }
+
+    } else {
+      resArr.push(arr[i]);
     }
-  });
+  }
   return resArr;
 };
-//console.log(transform([1, 2, 3, '--discard-next', 1337, '--double-prev', 4, 5]));
