@@ -25,7 +25,6 @@
   "homepage": "https://github.com/AlreadyBored/basic-js#readme",
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint": "^7.10.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.1",
     "mocha": "^7.0.1",
